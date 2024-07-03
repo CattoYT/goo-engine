@@ -21,8 +21,5 @@ jobs:
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
-      - name: Make update
-        run: make update
-
       - name: Make
-        run: make
+        run: make.bat
