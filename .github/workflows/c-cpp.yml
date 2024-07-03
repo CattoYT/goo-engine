@@ -1,12 +1,11 @@
 name: Compile Goo Engine
 
+
 on:
   push:
-    branches:
-      - main
+    branches: [ "goo-engine-main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "goo-engine-main" ]
 
 jobs:
   build:
