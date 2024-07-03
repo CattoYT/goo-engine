@@ -1,28 +1,31 @@
-name: Build Goo Engine
+name: Compile Goo Engine
+
 on:
   push:
-    branches: [ "goo-engine-main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "goo-engine-main" ]
-
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: windows-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: Setup CMake
-      uses: lukka/get-cmake@latest
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: |
-        choco install make -y  # Install make using Chocolatey
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
-    - name: Build Goo Engine
-      run: |
-        make update
-        make
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
 
+      - name: Make update
+        run: make update
+
+      - name: Make
+        run: make
