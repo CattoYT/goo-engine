@@ -14,28 +14,23 @@ if NOT EXIST %BUILD_VS_LIBDIR% (
 		echo The required external libraries in %BUILD_VS_LIBDIR% are missing
 		echo.
 		set /p GetLibs= "Would you like to download them? (y/n)"
-		if /I "!GetLibs!"=="Y" (
-			echo.
-			echo Downloading %BUILD_VS_SVNDIR% libraries, please wait.
-			echo.
+		
+		echo.
+		echo Downloading %BUILD_VS_SVNDIR% libraries, please wait.
+		echo.
 :RETRY			
-			"%SVN%" checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/%BUILD_VS_SVNDIR% %BUILD_VS_LIBDIR%
-			if errorlevel 1 (
-				set /p LibRetry= "Error during download, retry? y/n"
-				if /I "!LibRetry!"=="Y" (
-					cd %BUILD_VS_LIBDIR%
-					"%SVN%" cleanup 
-					cd %BLENDER_DIR%
-					goto RETRY
-				)
-				echo.
-				echo Error: Download of external libraries failed. 
-				echo This is needed for building, please manually run 'svn cleanup' and 'svn update' in
-				echo %BUILD_VS_LIBDIR% , until this is resolved you CANNOT make a successful blender build
-				echo.
+		"%SVN%" checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/%BUILD_VS_SVNDIR% %BUILD_VS_LIBDIR%
+		if errorlevel 1 (
 				exit /b 1
 			)
+			echo.
+			echo Error: Download of external libraries failed. 
+			echo This is needed for building, please manually run 'svn cleanup' and 'svn update' in
+			echo %BUILD_VS_LIBDIR% , until this is resolved you CANNOT make a successful blender build
+			echo.
+			exit /b 1
 		)
+		
 	)
 ) else (
 	if NOT EXIST %PYTHON% (
