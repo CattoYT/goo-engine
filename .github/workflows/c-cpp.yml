@@ -23,7 +23,6 @@ jobs:
 
     - name: Build Goo Engine
       run: |
-        cd goo-engine
         make update
         make
 
