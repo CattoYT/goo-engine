@@ -47,6 +47,10 @@ Development
 - [Developer Forum](https://devtalk.blender.org)
 - [Developer Documentation](https://developer.blender.org/docs/)
 
+Github Actions
+-------
+
+Don't expect it to work properly. I wrote it while skidding and procrastinating doing sparx maths
 
 License
 -------
