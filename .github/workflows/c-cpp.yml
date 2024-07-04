@@ -18,6 +18,9 @@ jobs:
           submodules: recursive
           lfs: 'true'
 
+      - name: Subversion install
+        run: chocolatey install svn
+
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
