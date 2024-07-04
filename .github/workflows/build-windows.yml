@@ -28,7 +28,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: clone others
-        run: git clone https://projects.blender.org/blender/lib-windows_x64.git lib\windows_x64 ; cd ${{ github.workspace }}
+        run: git clone https://projects.blender.org/blender/lib-windows_x64.git lib\win64_vc15 ; cd ${{ github.workspace }}
 
         
       - name: Make make
