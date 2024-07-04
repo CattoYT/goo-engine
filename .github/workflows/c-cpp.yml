@@ -19,7 +19,7 @@ jobs:
           lfs: 'true'
 
       - name: Subversion install
-        run: choco install svn
+        run: choco install svn -y
 
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
