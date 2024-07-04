@@ -27,8 +27,10 @@ jobs:
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
-      - name: Make
-        run: ./make update
+      - name: clone others
+        run: cd ${{ github.workspace }}/lib ; git clone https://projects.blender.org/blender/lib-windows_x64.git windows_x64 ; cd ${{ github.workspace }}
+
+        
       - name: Make make
         run: ./make
         
