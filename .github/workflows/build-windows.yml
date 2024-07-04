@@ -1,6 +1,5 @@
 name: Compile Goo Engine
 
-
 on:
   push:
     branches: [ "goo-engine-main" ]
@@ -18,7 +17,7 @@ jobs:
           submodules: recursive
           lfs: 'true'
 
-      - name: Subversion install
+      - name: Install Subversion
         run: choco install svn -y
 
       - name: Set up MSVC
@@ -27,10 +26,28 @@ jobs:
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
-      - name: clone others
-        run: git lfs clone https://projects.blender.org/blender/lib-windows_x64.git lib\win64_vc15 ; cd ${{ github.workspace }}
+      - name: Clone additional repository
+        run: git lfs clone https://projects.blender.org/blender/lib-windows_x64.git lib/win64_vc15 ; cd ${{ github.workspace }}
 
-        
-      - name: Make make
-        run: ./make
-        
+      - name: Build project
+        run: ./make  # Replace with your actual build command
+
+      # Zip the release
+      - name: Zip release
+        run: |
+          mkdir release
+          # Copy the build output from build_windows_x64_vc17_Release to the release directory
+          cp -r build_windows_x64_vc17_Release/* release/
+          7z a -r release.zip release
+
+      # Create a draft release
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2.0.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.sha }}-${{ github.run_number }}
+          name: v${{ github.sha }}-${{ github.run_number }}
+          files: release.zip
+          draft: true
