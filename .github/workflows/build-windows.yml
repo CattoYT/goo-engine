@@ -35,9 +35,6 @@ jobs:
       # Zip the release
       - name: Zip release
         run: |
-          mkdir release
-          # Copy the build output from build_windows_x64_vc17_Release to the release directory
-          cp -r build_windows_x64_vc17_Release/* release/
           7z a -r release.zip release
 
       # Create a draft release
