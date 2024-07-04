@@ -28,7 +28,5 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Make
-        run: make deps
-      - name: Make
-        run: ./make.bat
+        run: cmake --build . --target INSTALL --config Release
         
