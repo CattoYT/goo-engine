@@ -29,3 +29,8 @@ jobs:
 
       - name: Make
         run: ./make.bat
+      - name: SVN cleanup
+        run: cd lib ; svn cleanup ; svn update
+      - name: Make
+        run: ./make.bat
+        
