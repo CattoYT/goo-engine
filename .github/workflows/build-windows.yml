@@ -28,5 +28,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Make
-        run: ./make update ; ./make
+        run: ./make update
+      - name: Make make
+        run: ./make
         
