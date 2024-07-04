@@ -30,6 +30,9 @@ if NOT EXIST %BUILD_VS_LIBDIR% (
 			echo.
 			exit /b 1
 		)
+		cd %BUILD_VS_LIBDIR%
+		svn cleanup
+		svn update
 		
 	)
 ) else (
