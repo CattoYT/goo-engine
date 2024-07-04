@@ -28,7 +28,7 @@ if NOT EXIST %BUILD_VS_LIBDIR% (
 			echo This is needed for building, please manually run 'svn cleanup' and 'svn update' in
 			echo %BUILD_VS_LIBDIR% , until this is resolved you CANNOT make a successful blender build
 			echo.
-			exit /b 1
+			
 		)
 		cd %BUILD_VS_LIBDIR%
 		svn cleanup
