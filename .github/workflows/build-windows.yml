@@ -27,7 +27,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Clone additional repository
-        run: git lfs clone https://projects.blender.org/blender/lib-windows_x64.git lib/win64_vc15 ; cd ${{ github.workspace }}
+        run: git lfs clone https://projects.blender.org/blender/lib-windows_x64.git lib/win64_vc15
 
       - name: Build project
         run: ./make  # Replace with your actual build command
