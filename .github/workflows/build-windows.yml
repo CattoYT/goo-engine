@@ -35,6 +35,7 @@ jobs:
       # Zip the release
       - name: Zip release
         run: |
+          cd ../
           7z a -r release.zip build_windows_x64_vc17_Release/bin/Release/*
       # Create a draft release
       - name: Create Release
