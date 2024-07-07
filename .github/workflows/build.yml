@@ -1,6 +1,14 @@
 name: Compile Goo Engine
 
 on:
+  workflow_dispatch:
+    inputs:
+      operating_system:
+        description: "OS: <Windows/Linux>"
+        required: true
+        options: 
+        - Windows
+        - Linux
   push:
     branches: [ "goo-engine-main" ]
   pull_request:
