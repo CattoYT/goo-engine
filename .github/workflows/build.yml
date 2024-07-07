@@ -15,12 +15,9 @@ on:
     branches: [ "goo-engine-main" ]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
+  build-windows:
+    if: ${{ github.event.inputs.operating_system == 'Windows' }}
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -30,27 +27,50 @@ jobs:
           lfs: 'true'
 
       - name: Install Subversion
-        if: ${{ matrix.os == 'windows-latest' }}
         run: choco install svn -y
 
-      - name: Setup MSVC
-        if: ${{ matrix.os == 'windows-latest' }}
+      - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
       - name: Build project
-        run: ./make  # Replace with your actual build command
+        run: ./make
 
-      - name: Zip Release Windows
-        if: ${{ matrix.os == 'windows-latest' }}
+      - name: Zip release
         run: 7z a -r release.zip ../build_windows_x64_vc17_Release/bin/Release/*
-        
-      - name: Zip Release Linux
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: 7z a -r release.zip ../build_linux_x64_gcc_Release/bin/Release/*
 
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2.0.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.sha }}-${{ github.run_number }}
+          name: v${{ github.sha }}-${{ github.run_number }}
+          files: release.zip
+          draft: true
+
+  build-linux:
+    if: ${{ github.event.inputs.operating_system == 'Linux' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: 'true'
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Build project
+        run: ./make
+
+      - name: Zip release
+        run: zip -r release.zip ../build_linux_x64/bin/Release/*
 
       - name: Create Release
         id: create_release
