@@ -7,8 +7,8 @@ on:
         description: "OS: <Windows/Linux>"
         required: true
         options: 
-        - Windows
-        - Linux
+          - Windows
+          - Linux
   push:
     branches: [ "goo-engine-main" ]
   pull_request:
@@ -16,7 +16,11 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
 
     steps:
       - name: Checkout repository
@@ -26,9 +30,11 @@ jobs:
           lfs: 'true'
 
       - name: Install Subversion
+        if: ${{ matrix.os == 'windows-latest' }}
         run: choco install svn -y
 
-      - name: Set up MSVC
+      - name: Setup MSVC
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: ilammy/msvc-dev-cmd@v1
 
       - name: Setup CMake
@@ -37,11 +43,15 @@ jobs:
       - name: Build project
         run: ./make  # Replace with your actual build command
 
-      # Zip the release
-      - name: Zip release
-        run: |
-          7z a -r release.zip ../build_windows_x64_vc17_Release/bin/Release/*
-      # Create a draft release
+      - name: Zip Release Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: 7z a -r release.zip ../build_windows_x64_vc17_Release/bin/Release/*
+        
+      - name: Zip Release Linux
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: 7z a -r release.zip ../build_linux_x64_gcc_Release/bin/Release/*
+
+
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2.0.5
