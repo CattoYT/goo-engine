@@ -26,9 +26,6 @@ jobs:
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
-      - name: Clone additional repository
-        run: git clone https://projects.blender.org/blender/lib-windows_x64.git lib/win64_vc15
-
       - name: Build project
         run: ./make  # Replace with your actual build command
 
