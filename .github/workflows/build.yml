@@ -17,8 +17,8 @@ on:
 
 jobs:
   build-windows:
-    if: ${{ github.event.inputs.operating_system == 'Windows' }}
     runs-on: windows-latest
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.operating_system == 'Windows' }}
 
     steps:
       - name: Checkout repository
@@ -37,25 +37,20 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Build project
-        run: ./make
+        run: ./make  # Replace with your actual build command
 
       - name: Zip release
-        run: 7z a -r release.zip ../build_windows_x64_vc17_Release/bin/Release/*
+        run: 7z a -r windows-release.zip ../build_windows_x64_vc17_Release/bin/Release/*
 
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v2.0.5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Windows release artifact
+        uses: actions/upload-artifact@v3
         with:
-          tag_name: v${{ github.sha }}-${{ github.run_number }}
-          name: v${{ github.sha }}-${{ github.run_number }}
-          files: release.zip
-          draft: true
+          name: windows-release
+          path: windows-release.zip
 
   build-linux:
-    if: ${{ github.event.inputs.operating_system == 'Linux' }}
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.operating_system == 'Linux' }}
 
     steps:
       - name: Checkout repository
@@ -68,10 +63,32 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Build project
-        run: make
+        run: make  # Replace with your actual build command
 
       - name: Zip release
-        run: zip -r release.zip ../build_linux_x64/bin/Release/*
+        run: zip -r linux-release.zip ../build_linux_x64/bin/Release/*
+
+      - name: Upload Linux release artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-release
+          path: linux-release.zip
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-linux]
+    steps:
+      - name: Download Windows release artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-release
+          path: .
+
+      - name: Download Linux release artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-release
+          path: .
 
       - name: Create Release
         id: create_release
@@ -81,5 +98,7 @@ jobs:
         with:
           tag_name: v${{ github.sha }}-${{ github.run_number }}
           name: v${{ github.sha }}-${{ github.run_number }}
-          files: release.zip
+          files: |
+            windows-release.zip
+            linux-release.zip
           draft: true
