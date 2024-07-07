@@ -6,6 +6,7 @@ on:
       operating_system:
         description: "OS: <Windows/Linux>"
         required: true
+        default: Windows
         options: 
           - Windows
           - Linux
@@ -67,7 +68,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Build project
-        run: ./make
+        run: make
 
       - name: Zip release
         run: zip -r release.zip ../build_linux_x64/bin/Release/*
