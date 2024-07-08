@@ -7,6 +7,7 @@ on:
         description: "OS: <Windows/Linux>"
         required: true
         default: Windows
+        type: choice
         options: 
           - Windows
           - Linux
