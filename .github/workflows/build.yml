@@ -62,11 +62,23 @@ jobs:
       - name: Setup CMake
         uses: lukka/get-cmake@latest
 
+
+      - name: Setup dependencies
+        run: |
+          sudo apt update
+          sudo apt install build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
+          sudo apt install libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+          ./build_files/utils/make_update.py --use-linux-libraries
+
+          
       - name: Build project
-        run: make  # Replace with your actual build command
+      
+        run: |
+          make update
+          make  # Replace with your actual build command
 
       - name: Tar release
-        run: tar -czvf linux-release.tar.gz -C ../build_linux_x64/bin/Release .
+        run: tar -czvf linux-release.tar.gz -C ../build_linux/bin/* .
 
       - name: Upload Linux release artifact
         uses: actions/upload-artifact@v3
