@@ -10,6 +10,9 @@ on:
         options: 
           - Windows
           - Linux
+      branch:
+        description: "Branch to checkout from dillongoostudios/goo-engine"
+        required: false
   push:
     branches: [ "goo-engine-main" ]
   pull_request:
@@ -22,8 +25,18 @@ jobs:
 
     steps:
       - name: Checkout repository
+        if: ${{ github.event_name != 'workflow_dispatch' || !github.event.inputs.branch }}
         uses: actions/checkout@v4
         with:
+          submodules: recursive
+          lfs: 'true'
+
+      - name: Checkout dillongoostudios/goo-engine
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch }}
+        uses: actions/checkout@v4
+        with:
+          repository: dillongoostudios/goo-engine
+          ref: ${{ github.event.inputs.branch }}
           submodules: recursive
           lfs: 'true'
 
@@ -54,14 +67,23 @@ jobs:
 
     steps:
       - name: Checkout repository
+        if: ${{ github.event_name != 'workflow_dispatch' || !github.event.inputs.branch }}
         uses: actions/checkout@v4
         with:
           submodules: recursive
           lfs: 'true'
 
+      - name: Checkout dillongoostudios/goo-engine
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch }}
+        uses: actions/checkout@v4
+        with:
+          repository: dillongoostudios/goo-engine
+          ref: ${{ github.event.inputs.branch }}
+          submodules: recursive
+          lfs: 'true'
+
       - name: Setup CMake
         uses: lukka/get-cmake@latest
-
 
       - name: Setup dependencies
         run: |
@@ -70,15 +92,13 @@ jobs:
           sudo apt install libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
           ./build_files/utils/make_update.py --use-linux-libraries
 
-          
       - name: Build project
-      
         run: |
           make update
           make  # Replace with your actual build command
 
       - name: Tar release
-        run: tar -czvf linux-release.tar.gz -C ../build_linux/bin/* .
+        run: tar -czvf linux-release.tar.gz -C ../build_linux_x64/bin/* .
 
       - name: Upload Linux release artifact
         uses: actions/upload-artifact@v3
