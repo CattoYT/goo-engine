@@ -21,7 +21,7 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.operating_system == 'Windows' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.operating_system == 'Windows' || github.event.inputs.operating_system == '' }}
 
     steps:
       - name: Checkout repository
@@ -63,7 +63,7 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.operating_system == 'Linux' }}
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.operating_system == 'Linux' || github.event.inputs.operating_system == ''}}
 
     steps:
       - name: Checkout repository
