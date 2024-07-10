@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       operating_system:
-        description: "OS: <Windows/Linux>"
-        required: true
+        description: "OS: <Windows/Linux> | Leave blank for both"
+        required: false
         default: Windows
         options: 
           - Windows
