@@ -50,7 +50,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Build project
-        run: ./make  # Replace with your actual build command
+        run: echo "y" | ./make  # Replace with your actual build command
 
       - name: Zip release
         run: 7z a -r windows-release.zip ../build_windows_x64_vc17_Release/bin/Release/*
@@ -94,8 +94,8 @@ jobs:
 
       - name: Build project
         run: |
-          make update
-          make  # Replace with your actual build command
+          echo "y" | make update
+          echo "y" | make  # Replace with your actual build command
 
       - name: Tar release
         run: tar -czvf linux-release.tar.gz -C ../build_linux_x64/bin/* .
