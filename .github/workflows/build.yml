@@ -75,14 +75,14 @@ jobs:
           make update  # Replace with your actual build command
           make
 
-      - name: Zip release
-        run: zip -r linux-release.zip ../build_linux/bin/*
+      - name: Tar release
+        run: tar -cvf linux-release.zip ../build_linux/bin/*
 
       - name: Upload Linux release artifact
         uses: actions/upload-artifact@v3
         with:
           name: linux-release
-          path: linux-release.zip
+          path: linux-release.tar
 
   create-release:
     runs-on: ubuntu-latest
@@ -110,5 +110,5 @@ jobs:
           name: v${{ github.sha }}-${{ github.run_number }}
           files: |
             windows-release.zip
-            linux-release.zip
+            linux-release.tar
           draft: true
