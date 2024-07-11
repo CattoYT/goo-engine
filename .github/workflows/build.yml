@@ -52,14 +52,13 @@ jobs:
       - name: Build project
         run: echo "y" | ./make  # Replace with your actual build command
 
-      - name: Zip release
-        run: 7z a -r windows-release.zip ../build_windows_x64_vc17_Release/bin/Release/*
+
 
       - name: Upload Windows release artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-release
-          path: windows-release.zip
+          path: ../build_windows_x64_vc17_Release/bin/Release/*
 
   build-linux:
     runs-on: ubuntu-latest
@@ -101,36 +100,7 @@ jobs:
         run: tar -czvf linux-release.tar.gz -C ../build_linux_x64/bin/* .
 
       - name: Upload Linux release artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-release
           path: linux-release.tar.gz
-
-  create-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Windows release artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: windows-release
-          path: .
-          continue-on-error: true
-      - name: Download Linux release artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: linux-release
-          path: .
-          continue-on-error: true
-
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v2.0.5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.sha }}-${{ github.run_number }}
-          name: v${{ github.sha }}-${{ github.run_number }}
-          files: |
-            windows-release.zip
-            linux-release.tar.gz
-          draft: true
