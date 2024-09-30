@@ -14,9 +14,9 @@ on:
         description: "Branch to checkout from dillongoostudios/goo-engine"
         required: false
   push:
-    branches: [ "goo-engine-main" ]
+    branches: [ "goo-engine-v4.1-release" ]
   pull_request:
-    branches: [ "goo-engine-main" ]
+    branches: [ "goo-engine-v4.1-release" ]
 
 jobs:
   build-windows:
