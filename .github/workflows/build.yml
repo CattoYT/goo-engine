@@ -97,7 +97,7 @@ jobs:
           echo "y" | make  # Replace with your actual build command
 
       - name: Tar release
-        run: tar -czvf linux-release.tar.gz -C ../build_linux/bin/* .
+        run: tar -czvf linux-release.tar.gz -C ../build_linux/bin .
 
       - name: Upload Linux release artifact
         uses: actions/upload-artifact@v4
